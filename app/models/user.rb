@@ -14,5 +14,16 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord
-  
+  encrypts :password # non-determanistic encryption into the DB. 
+  validates :email, :password, :username, presence: true
+  validates :password, length: { in: 6..20 }
+  validates :username, length: { in: 3..40 }
+  validates :email, uniqueness: true, if: :email_validator
+
+  private 
+    def email_validator
+      unless self.email =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+        self.errors.add(:email, :not_a_valid_email)
+      end
+    end
 end
