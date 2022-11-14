@@ -19,6 +19,7 @@ class User < ApplicationRecord
   validates :password, length: { in: 6..20 }
   validates :username, length: { in: 3..40 }
   validates :email, uniqueness: true, if: :email_validator
+  has_many :authentication_tokens
 
   private 
     def email_validator
