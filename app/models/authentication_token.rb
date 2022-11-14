@@ -22,6 +22,12 @@ class AuthenticationToken < ApplicationRecord
   
   validates :token, presence: true
 
+  class << self 
+    def gen_token 
+      SecureRandom.uuid
+    end
+  end
+
   def set_token 
     self.token = SecureRandom.uuid
   end
