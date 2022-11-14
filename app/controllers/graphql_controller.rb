@@ -4,14 +4,14 @@ class GraphqlController < ApplicationController
   # but you'll have to authenticate your user separately
   protect_from_forgery with: :null_session
 
+  TOKEN_HEADER = "Auth-Token".freeze 
+  before_action :set_graphql_user_context
+
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
-    }
+    context = @graphql_context
     result = GqlBackendSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
   rescue StandardError => e
@@ -46,5 +46,19 @@ class GraphqlController < ApplicationController
     logger.error e.backtrace.join("\n")
 
     render json: { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }, status: 500
+  end
+
+  def set_graphql_user_context
+    @graphql_context = { current_user: get_user }
+  end
+
+  def get_user 
+    AuthenticationToken.includes(:user)
+                       .find_by(token: token, invalidated_at: nil)
+                       &.user
+  end
+
+  def token 
+    request.headers[TOKEN_HEADER]
   end
 end

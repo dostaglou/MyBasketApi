@@ -13,5 +13,15 @@ module Types
     def test_field
       "Hello World!"
     end
+
+    field :private_data, String, null: false 
+
+    def private_data
+      if current_user.is_a?(User)
+        "this is private" 
+      else 
+        return GraphQL::ExecutionError.new("Naught, naughty", extensions: { code: :unauthorized })
+      end
+    end
   end
 end
