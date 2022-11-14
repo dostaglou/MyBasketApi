@@ -21,6 +21,7 @@ class AuthenticationToken < ApplicationRecord
   belongs_to :user
   
   validates :token, presence: true
+  before_validation :set_token
 
   class << self 
     def gen_token 
@@ -28,7 +29,7 @@ class AuthenticationToken < ApplicationRecord
     end
   end
 
-  def set_token 
-    self.token = SecureRandom.uuid
+  def set_token
+    self.token = SecureRandom.uuid if self.token.blank?
   end
 end

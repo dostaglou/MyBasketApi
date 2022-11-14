@@ -9,8 +9,7 @@ class Mutations::Login < Mutations::BaseMutation
       return GraphQL::ExecutionError.new("unfound", extensions: { code: :unauthorized })
     end
     
-    token = AuthenticationToken.gen_token
-    user.authentication_tokens.create!(token: token)
+    token = user.authentication_tokens.create!(token: token)
 
     { token: token }
   end
