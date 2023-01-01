@@ -4,7 +4,7 @@ class GraphqlController < ApplicationController
   # but you'll have to authenticate your user separately
   protect_from_forgery with: :null_session
 
-  TOKEN_HEADER = "Auth-Token".freeze 
+  TOKEN_HEADER = "Auth-Token".freeze
   before_action :set_graphql_user_context
 
   def execute
@@ -52,13 +52,13 @@ class GraphqlController < ApplicationController
     @graphql_context = { current_user: get_user }
   end
 
-  def get_user 
+  def get_user
     AuthenticationToken.includes(:user)
                        .find_by(token: token, invalidated_at: nil)
                        &.user
   end
 
-  def token 
+  def token
     request.headers[TOKEN_HEADER]
   end
 end
