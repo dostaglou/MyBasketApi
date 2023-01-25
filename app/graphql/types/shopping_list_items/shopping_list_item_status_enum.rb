@@ -1,4 +1,5 @@
 class Types::ShoppingListItems::ShoppingListItemStatusEnum < Types::BaseEnum
-  value :pending
-  value :picked_up
+  ShoppingListItem.statuses.each do |status, _|
+    value status
+  end
 end

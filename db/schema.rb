@@ -35,7 +35,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_25_105458) do
   create_table "shopping_list_items", force: :cascade do |t|
     t.bigint "shopping_list_id", null: false
     t.bigint "catalogue_item_id"
-    t.integer "status", null: false
+    t.integer "status", default: 1, null: false
     t.integer "quantity", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

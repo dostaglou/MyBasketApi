@@ -4,7 +4,7 @@
 #
 #  id                :bigint           not null, primary key
 #  quantity          :integer          not null
-#  status            :string           not null
+#  status            :integer          default("pending"), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  catalogue_item_id :bigint

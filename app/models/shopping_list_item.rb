@@ -4,7 +4,7 @@
 #
 #  id                :bigint           not null, primary key
 #  quantity          :integer          not null
-#  status            :string           not null
+#  status            :integer          default("pending"), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  catalogue_item_id :bigint
@@ -24,6 +24,9 @@ class ShoppingListItem < ApplicationRecord
   belongs_to :shopping_list
   belongs_to :catalogue_item
   validates :catalogue_item_id, uniqueness: { scope: :shopping_list_id }
+
+  delegate :name, to: :catalogue_item
+  delegate :description, to: :catalogue_item
 
   enum status: {
     pending: 1,

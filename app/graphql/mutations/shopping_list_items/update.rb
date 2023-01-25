@@ -1,14 +1,15 @@
 class Mutations::ShoppingListItems::Update < Mutations::BaseMutation
   argument :shopping_list_item_id, ID, required: true
-  argument :shopping_list_item_details,
-           Types::ShoppingListItems::ShoppingListItemInput,
-           required: true
+  argument :status, Types::ShoppingListItems::ShoppingListItemStatusEnum, required: false
+  argument :quantity, Integer, required: false
 
-  def resolve(shopping_list_item_id:, shopping_list_item_details:)
-    sli = ShoppingListItem.find(shopping_list_item_id)
+  def resolve(shopping_list_item_id:, status: nil, quantity: nil)
+    list_item = ShoppingListItem.find(shopping_list_item_id)
+    list_item.status = status if status
+    list_item.quantity = quantity if quantity
 
-    sli.update!(shopping_list_item_details)
+    list_item.update!
 
-    sli
+    list_item
   end
 end
