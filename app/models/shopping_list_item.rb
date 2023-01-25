@@ -23,4 +23,9 @@
 class ShoppingListItem < ApplicationRecord
   belongs_to :shopping_list
   belongs_to :catalogue_item
+
+  enum status: {
+    pending: 1,
+    picked_up: 2
+  }
 end
