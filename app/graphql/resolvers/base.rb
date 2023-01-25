@@ -1,3 +1,3 @@
 class Resolvers::Base < GraphQL::Schema::Resolver
-  # include GraphqlAuthorizationContext
+  include SharedMethods
 end

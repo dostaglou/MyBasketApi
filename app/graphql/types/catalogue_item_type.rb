@@ -4,4 +4,8 @@ class Types::CatalogueItemType < Types::BaseObject
   field :name, String, null: false
   field :description, String, null: false
   field :image_url, String, null: true
+
+  def image_url
+    ""
+  end
 end

@@ -1,22 +1,14 @@
 class Resolvers::ShoppingListItemSearch < Resolvers::Base
   argument :shopping_list_item_id, ID, required: false
-  argument :shopping_list_id, ID, required: true
+  argument :shopping_list_id, ID, required: false
 
-  def resolve(shopping_list_id:, shopping_list_item_id: nil)
-    num = rand(5)
-    ids = (1..20).to_a.sample(num)
+  def resolve(shopping_list_id: nil, shopping_list_item_id: nil)
+    scope = current_user.shopping_list_items
 
-    ids << shopping_list_item_id
+    return [scope.find(shopping_list_item_id)] if shopping_list_item_id
 
-    ids = ids.compact.uniq
-    items = ids.map.with_index(1) do |id, index|
-      {
-        id: id * index,
-        shopping_list_id: shopping_list_id,
-        catalogue_item_id: id * ( index + 1 ),
-        quantity: rand(5),
-        status: %i(to_buy purchased).sample,
-      }
-    end
+    scope = scope.where(shopping_list_id: shopping_list_id) if shopping_list_id
+
+    scope
   end
 end

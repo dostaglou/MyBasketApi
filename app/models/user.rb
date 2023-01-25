@@ -22,6 +22,7 @@ class User < ApplicationRecord
   has_many :authentication_tokens
   has_many :shopping_lists
   has_many :catalogue_items
+  has_many :shopping_list_items, through: :shopping_lists
 
   before_create :unify_email
 
