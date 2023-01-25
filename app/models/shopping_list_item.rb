@@ -23,6 +23,7 @@
 class ShoppingListItem < ApplicationRecord
   belongs_to :shopping_list
   belongs_to :catalogue_item
+  validates :catalogue_item_id, uniqueness: { scope: :shopping_list_id }
 
   enum status: {
     pending: 1,

@@ -21,5 +21,13 @@ class CatalogueItem < ApplicationRecord
   belongs_to :user
   has_many :shopping_list_items
 
+  before_save :clean_name, if: -> (item) { item.will_save_change_to_name? }
   validates :name, presence: true
+  validates :name, uniqueness: { scope: :user_id }
+
+
+  private
+    def clean_name
+      self.name = self.name.strip
+    end
 end
