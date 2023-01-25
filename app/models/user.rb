@@ -20,6 +20,8 @@ class User < ApplicationRecord
   validates :username, length: { in: 3..40 }
   validates :email, uniqueness: true, if: :email_validator
   has_many :authentication_tokens
+  has_many :shopping_lists
+  has_many :catalogue_items
 
   before_create :unify_email
 

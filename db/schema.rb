@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_14_094731) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_25_105458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,34 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_14_094731) do
     t.index ["user_id"], name: "index_authentication_tokens_on_user_id"
   end
 
+  create_table "catalogue_items", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_catalogue_items_on_user_id"
+  end
+
+  create_table "shopping_list_items", force: :cascade do |t|
+    t.bigint "shopping_list_id", null: false
+    t.bigint "catalogue_item_id"
+    t.string "status", null: false
+    t.integer "quantity", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["catalogue_item_id"], name: "index_shopping_list_items_on_catalogue_item_id"
+    t.index ["shopping_list_id"], name: "index_shopping_list_items_on_shopping_list_id"
+  end
+
+  create_table "shopping_lists", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_shopping_lists_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "username", null: false
@@ -33,4 +61,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_14_094731) do
   end
 
   add_foreign_key "authentication_tokens", "users"
+  add_foreign_key "catalogue_items", "users"
+  add_foreign_key "shopping_list_items", "catalogue_items"
+  add_foreign_key "shopping_list_items", "shopping_lists"
+  add_foreign_key "shopping_lists", "users"
 end
