@@ -37,4 +37,32 @@ class GqlBackendSchema < GraphQL::Schema
     # For example, use Rails' GlobalID library (https://github.com/rails/globalid):
     GlobalID.find(global_id)
   end
+
+  rescue_from(ActiveRecord::RecordNotFound) do
+    raise ApiError.format_error(code: :resource_not_found)
+  end
+
+  rescue_from(ActiveRecord::RecordInvalid) do |exception|
+    raise ApiError.format_error(
+      message: exception.record.errors.full_messages.join("\n"),
+      code: :record_invalid
+    )
+  end
+
+  rescue_from(ActiveRecord::RecordNotUnique) do |exception|
+    raise ApiError.format_error(code: :record_not_unique)
+  end
+
+  rescue_from(ActiveRecord::RecordNotDestroyed) do |exception|
+    raise ApiError.format_error(
+      message: exception.record.errors.full_messages.join("\n"),
+      code: :record_not_destroyed
+    )
+  end
+
+  rescue_from(ActiveRecord::NotNullViolation) do |exception|
+    # PG::NotNullViolation doesn't have :record
+    # :full_message stack trace seems like too much.
+    raise ApiError.format_error(message: exception.message, code: :inappropriate_null_value)
+  end
 end
