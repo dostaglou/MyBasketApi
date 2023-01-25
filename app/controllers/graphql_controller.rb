@@ -49,7 +49,7 @@ class GraphqlController < ApplicationController
   end
 
   def set_graphql_user_context
-    @graphql_context = { current_user: get_user }
+    @graphql_context = { current_user: nil } # get_user }
   end
 
   def get_user
