@@ -14,7 +14,7 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord
-  encrypts :password # non-determanistic encryption into the DB.
+  # encrypts :password # non-determanistic encryption into the DB.
   validates :email, :password, :username, presence: true
   validates :password, length: { in: 6..20 }
   validates :username, length: { in: 3..40 }
